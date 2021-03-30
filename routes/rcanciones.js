@@ -1,5 +1,5 @@
 module.exports = function(app, swig) {
-    app.get("/canciones", function (req, res) {
+    app.get('/canciones', function (req, res) {
         let canciones = [{
             "nombre": "Blank space",
             "precio": "1.2"
@@ -41,7 +41,7 @@ module.exports = function(app, swig) {
         res.send(respuesta);
     });
 
-    app.post("/cancion", function (req, res) {
+    app.post('/cancion', function (req, res) {
         res.send("Cancion agregada: " + req.body.nombre + "<br>"
             + " genero: " + req.body.genero + "<br>"
             + " precio: " + req.body.precio);
@@ -50,11 +50,5 @@ module.exports = function(app, swig) {
     app.get('/promo*', function (req, res) {
         res.send('Respuesta patrón promo* ');
     });
-
-    //Codigo dado incompleto
-    //module.exports = function(app, swig) {
-    //    app.get("/nuevas/canciones", function(req, res) {
-    //        var canciones = [ {
-    //            "nombre" : "Blank space",
 
 };
