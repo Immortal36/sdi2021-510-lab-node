@@ -143,11 +143,35 @@ module.exports = function(app, swig, gestorBD) {
                         paginas.push(i);
                     }
                 }
+
+                let cancion = {
+                    _id: "",
+                    nombre : "",
+                    genero : "",
+                    precio : 0,
+                    autor: "",
+                    filtrar: false
+                }
+                let filtradas = [];
+
+                for(let i = 0; i < canciones.length; i++) {
+                    cancion._id = canciones[i]._id;
+                    cancion.nombre = canciones[i].nombre;
+                    cancion.genero = canciones[i].genero;
+                    cancion.precio = canciones[i].precio;
+                    cancion.autor = canciones[i].autor;
+
+                    if(req.session.usuario == cancion.autor)
+                        cancion.filtrar = true;
+
+                    filtradas.push(cancion)
+                }
+
                 let respuesta = swig.renderFile('views/btienda.html',
                     {
-                        canciones : canciones,
+                        canciones : filtradas,
                         paginas : paginas,
-                        actual : pg
+                        actual : pg,
                     });
                 res.send(respuesta);
             }
@@ -249,16 +273,31 @@ module.exports = function(app, swig, gestorBD) {
     });
 
     app.get('/cancion/comprar/:id', function (req, res) {
-        let cancionId = gestorBD.mongo.ObjectID(req.params.id);
-        let compra = {
-            usuario : req.session.usuario,
-            cancionId : cancionId
-        }
-        gestorBD.insertarCompra(compra ,function(idCompra){
-            if ( idCompra == null ){
-                res.send(respuesta);
+
+        let criterio = { _id : gestorBD.mongo.ObjectID(req.params.id) };
+        gestorBD.obtenerCanciones(criterio, function(canciones) {
+            if (canciones == null) {
+                res.send("Error al listar ");
             } else {
-                res.redirect("/compras");
+                if(canciones.autor == req.session.usuario) {
+                    res.send("Error al listar ");
+                }
+                else {
+                    let cancionId = gestorBD.mongo.ObjectID(req.params.id);
+
+                    let compra = {
+                        usuario : req.session.usuario,
+                        cancionId : cancionId
+                    }
+
+                    gestorBD.insertarCompra(compra ,function(idCompra){
+                        if ( idCompra == null ){
+                            res.send(respuesta);
+                        } else {
+                            res.redirect("/compras");
+                        }
+                    });
+                }
             }
         });
     });
