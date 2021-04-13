@@ -60,8 +60,13 @@ module.exports = function(app, swig, gestorBD) {
     });
 
     app.get('/suma', function (req, res) {
-        let respuesta = parseInt(req.query.num1) + parseInt(req.query.num2);
-        res.send(String(respuesta));
+        let r = parseInt(req.query.num1) + parseInt(req.query.num2);
+
+        let respuesta = swig.renderFile('views/error.html',
+            {
+                error : "La pagina / suma no esta disponible",
+            });
+        res.send(respuesta);
     });
 
     app.get('/canciones/agregar', function (req, res) {
