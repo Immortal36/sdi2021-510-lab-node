@@ -40,11 +40,15 @@
             headers: { "token": token },
             success: function(respuesta) {
                 console.log(respuesta); // <-- Prueba
-                $( "#contenedor-principal" ).load( "widget-canciones.html");
+
+                if(respuesta.error)
+                    $("#contenedor-principal").prepend("<div class = 'alert alert-danger'>" + respuesta.error + "</div>");
+
+                else $( "#contenedor-principal" ).load( "widget-canciones.html");
 
             },
-            error : function (error){
-                $( "#contenedor-principal" ).load("widget-login.html");
+            error : function (error) {
+                $("#contenedor-principal").prepend("<div class = 'alert alert-danger'> " + error  + " </div>");
             }
         });
     }
