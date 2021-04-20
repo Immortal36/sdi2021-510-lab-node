@@ -116,16 +116,18 @@
 
     var nombreDsc = true;
     function ordenarPorNombre(){
-
-    }
-
-
-    var nombreDsc = true;
-    function ordenarPorNombre(){
         if(nombreDsc)
-            canciones.reverse();
+            canciones.sort(function (a, b) {
+                if(a.nombre < b.nombre)
+                    return -1;
+                else return 1;
+            });
         else
-            canciones.sort();
+            canciones.sort(function (a, b) {
+                if(b.nombre < a.nombre)
+                    return -1;
+                else return 1;
+            });
 
         actualizarTabla(canciones);
         nombreDsc = !nombreDsc;
@@ -135,11 +137,15 @@
     function ordenarPorGenero(){
         if(genDsc)
             canciones.sort(function (a, b) {
-                return parseInt(a.genero.charAt(0))  - parseInt(b.genero.charAt(0));
+                if(a.genero < b.genero)
+                    return -1;
+                else return 1;
             });
         else
             canciones.sort(function (a, b) {
-                return parseInt(b.genero.charAt(0))  - parseInt(a.genero.charAt(0));
+                if(b.genero < a.genero)
+                    return -1;
+                else return 1;
             });
 
         actualizarTabla(canciones);
